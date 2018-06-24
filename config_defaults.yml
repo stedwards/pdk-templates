@@ -60,6 +60,8 @@
     - /^v\d/
 .yardopts:
   markup: markdown
+  optional:
+    - '--output-dir doc/'
 appveyor.yml:
   appveyor_bundle_install: "bundle install --jobs 4 --retry 2 --without system_tests"
   matrix:
@@ -500,6 +502,8 @@ Rakefile:
 Gemfile:
   required:
     ':development':
+      - gem: dotenv
+        platforms: ruby
       - gem: fast_gettext
         version: '1.1.0'
         condition: "Gem::Version.new(RUBY_VERSION.dup) < Gem::Version.new('2.1.0')"
@@ -531,6 +535,10 @@ Gemfile:
           - mswin
           - mingw
           - x64_mingw
+      - gem: rgen
+        platforms: ruby
+      - gem: toml
+        platforms: ruby
     # ':system_tests':
     #   - gem: 'puppet-module-posix-system-r#{minor_version}'
     #     platforms: ruby
@@ -572,5 +580,10 @@ spec/default_facts.yml:
   ipaddress: "172.16.254.254"
   is_pe: false
   macaddress: "AA:AA:AA:AA:AA:AA"
+  extra_facts:
+    applicationtier: "spec"
+    augeasversion: "1.4.0"
+    sudoversion: "1.8.6p3-29"
 spec/spec_helper.rb:
+  hiera_config: "spec/hiera/hiera.yaml"
   strict_level: ":warning"

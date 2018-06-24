@@ -4,6 +4,7 @@ RSpec.configure do |c|
 end
 <%- end -%>
 
+require 'dotenv/load'
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet-facts'
 
@@ -43,6 +44,14 @@ RSpec.configure do |c|
     Puppet.settings[:strict] = <%= @configs['strict_level'] %>
   end
   <%- end -%>
+  c.after(:suite) do
+    # run test coverage report
+    if ENV['COVERAGE']
+      RSpec::Puppet::Coverage.report!(ENV['COVERAGE'].to_i)
+    else
+      RSpec::Puppet::Coverage.report!
+    end
+  end
 end
 
 def ensure_module_defined(module_name)
